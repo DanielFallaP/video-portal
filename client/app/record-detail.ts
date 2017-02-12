@@ -1,0 +1,33 @@
+export class RecordDetail{
+  id: string;
+  type: string;
+  state: string;
+  testScore: number;
+  testScoreChange: number;
+  maintainabilityScore: number;
+  maintainabilityScoreChange: number;
+  securityScore: number;
+  securityScoreChange: number;
+  workmanshipScore: number;
+  workmanshipScoreChange: number;
+  debugBuild: boolean;
+  releaseBuild: boolean;
+  unitTestCoverage: number;
+  unitTestSuccessful: number;
+  unitTestFailing: number;
+  funcTestCoverage: number;
+  funcTestSuccessful: number;
+  funcTestFailing: number;
+  funcTestSuccess?: number;
+  unitTestSuccess?: number;
+  testColor?:string;
+  maintainabilityColor?:string;
+  securityColor?:string;
+  workmanshipColor?:string;
+  testArrow?:string;
+  maintainabilityArrow?:string;
+  securityArrow?:string;
+  workmanshipArrow?:string;
+  timeEndedDate?: Date;
+  timeEnded?: number;
+}

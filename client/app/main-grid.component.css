@@ -1,0 +1,23 @@
+.selected-running {
+  background-color: #cfddec;
+}
+
+.selected-success {
+  background-color: #bad0ac;
+}
+
+.selected-failure {
+  background-color: #f2c2c3;
+}
+
+.selected-pending {
+  background-color: #ebf0f7 ;
+}
+
+table.record-table td {
+    padding: 0px 5px;
+    display: table-cell;
+    text-align: left;
+    vertical-align: middle;
+    /* border-radius: 2px; */
+}

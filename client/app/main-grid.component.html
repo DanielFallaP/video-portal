@@ -1,0 +1,186 @@
+<div style="margin:20px 23px 0px 15px">
+<table >
+	<tr>
+		<th >
+			Changelist/Build
+		</th>
+		<th style="width:15%">
+			Owner
+		</th >
+		<th style="width:20%">
+			Time Started
+		</th>
+		<th style="width:10%">
+			State
+		</th>
+		<th style="width:8%">
+			Metrics
+		</th>
+		<th style="width:8%">
+			Build
+		</th>
+		<th style="width:8%">
+			Unit Test
+		</th>
+		<th style="width:8%">
+			Func. Test
+		</th>		
+	</tr>
+</table>
+</div>
+<div style="margin: 0px 15px 0px 15px;">
+<ul materialize="collapsible" class="collapsible" data-collapsible="accordion" >
+  <li *ngFor="let record of records" >
+    <div class="collapsible-header" id="{{record.id}}" (click)="getRecordDetail(record)"
+		[class.selected-success]="record.state==='Complete' || record.state==='Accepted'"
+		[class.selected-running]="record.state==='Running'"
+		[class.selected-failure]="record.state==='Rejected' || record.state==='Failed'"
+		[class.selected-pending]="record.state==='Pending'"
+		>
+		<table class="record-table">			
+			<tr>
+				<td >
+					<i *ngIf="record.type==='build'" class="material-icons">
+						computer
+					</i>
+					<i *ngIf="record.type==='firewall'" class="material-icons">line_style</i>
+					{{record.id}}
+				</td>
+				<td style="width:15%">
+					{{record.owner}}
+				</td>
+				<td style="width:20%" *ngIf="record.timeStartedDate">
+					{{record.timeStartedDate | date: 'MM/dd/yyyy HH:mm'}}
+				</td >
+				<td style="width:20%" *ngIf="!record.timeStartedDate">
+					&nbsp;
+				</td >
+				<td style="width:10%">
+					{{record.state}}
+				</td>
+				<td style="width:8%">
+					<i class="material-icons" *ngIf="record.metrics" [style.color]="getColor(record.metrics)">
+						{{getIcon(record.state)}}
+					</i>
+					<i class="material-icons" *ngIf="!record.metrics" style="color:transparent;">
+						label
+					</i>
+				</td>
+				<td style="width:8%">					
+					<i class="material-icons" *ngIf="record.build" [style.color]="getColor(record.build)">
+						{{getIcon(record.state)}}
+					</i>
+					<i class="material-icons" *ngIf="!record.build" style="color:transparent;">
+						label
+					</i>
+				</td>
+				<td style="width:8%">
+					<i class="material-icons" *ngIf="record.unitTest" [style.color]="getColor(record.unitTest)">
+						{{getIcon(record.state)}}
+					</i>
+					<i class="material-icons" *ngIf="!record.unitTest" style="color:transparent;">
+						label
+					</i>
+				</td>
+				<td style="width:8%">
+					<i class="material-icons" *ngIf="record.functionalTest" [style.color]="getColor(record.functionalTest)">
+						{{getIcon(record.state)}}
+					</i>
+					<i class="material-icons" *ngIf="!record.functionalTest" style="color:transparent;">
+						label
+					</i>
+				</td>
+			</tr>
+		</table>
+	</div>
+	<div class="collapsible-body" 
+		*ngIf="record.state!=='Pending' && record.state!=='Running'"
+		[class.selected-success]="record.state==='Complete' || record.state==='Accepted'"
+		[class.selected-running]="record.state==='Running'"
+		[class.selected-failure]="record.state==='Rejected' || record.state==='Failed'"
+		[class.selected-pending]="record.state==='Pending'">
+		<div class="row">
+			<div class="col s3 m3" id="{{record.id+'metrics'}}">
+			  <div class="card" style="cursor:pointer" (click)="openModal(record.id+'metrics')">
+				<div class="card-content black-text" [style.background-color]="getDetailColor(record.metrics)">
+				  <span class="card-title"><b>Metrics</b></span>
+				  <table *ngIf="recordDetail">
+					<tr>
+						<td style="width: 50%;margin: 0px auto;"><div><i class="material-icons" [style.color]="getTestColor()">{{recordDetail.testArrow}}</i><b>{{recordDetail.testScore}}</b></div><br><div style="margin-top: -23px;">Test</div></td>
+						<td style="width: 50%;margin: 0px auto;"><div><i class="material-icons" [style.color]="getMaintainabilityColor()">{{recordDetail.maintainabilityArrow}}</i><b>{{recordDetail.maintainabilityScore}}</b></div><br><div style="margin-top: -23px;">Maintainability</div></td>
+					</tr>
+					<tr>
+						<td style="width: 50%;margin: 0px auto;"><div><i class="material-icons" [style.color]="getSecurityColor()">{{recordDetail.securityArrow}}</i><b>{{recordDetail.securityScore}}</b></div><br><div style="margin-top: -23px;">Security</div></td>
+						<td style="width: 50%;margin: 0px auto;"><div><i class="material-icons" [style.color]="getWorkmanshipColor()">{{recordDetail.workmanshipArrow}}</i><b>{{recordDetail.workmanshipScore}}</b></div><br><div style="margin-top: -23px;">Workmanship</div></td>
+					</tr>					
+				  </table>
+				</div>
+			  </div>
+			</div>
+			<div class="col s3 m3" id="{{record.id+'modalBuild'}}">
+			  <div class="card" style="cursor:pointer" (click)="openModal(record.id+'modalBuild')">
+				<div class="card-content black-text" [style.background-color]="getDetailColor(record.build)">
+				  <span class="card-title"><b>Build</b></span>
+				  <table *ngIf="recordDetail" style="margin: 6px 0px 0px 0px;">
+					<tr >
+						<td *ngIf="recordDetail.debugBuild"><div style="width: 50%;margin: 0px auto;"><i class="material-icons" style="color: #5e9cd3; font-size: 48px;">computer</i><b>&nbsp;&nbsp;Debug</b></div></td>
+						<td *ngIf="recordDetail.releaseBuild"><div style="width: 50%;margin: 0px auto;"><i class="material-icons" style="color: #5e9cd3; font-size: 48px;">computer</i><b>&nbsp;&nbsp;Release</b></div></td>
+					
+					</tr>
+					<tr >
+						<td colspan="2"><div style="width: 50%;margin: 0px auto;" *ngIf="recordDetail.timeEndedDate">{{recordDetail.timeEndedDate | date: 'MM/dd/yyyy HH:mm'}}</div></td>
+					</tr>
+				  </table>
+				</div>
+			  </div>
+			</div>
+			<div class="col s3 m3" id="{{record.id+'modalUnitTest'}}">
+			  <div class="card" style="cursor:pointer" (click)="openModal(record.id+'modalUnitTest')">
+				<div class="card-content black-text" *ngIf="recordDetail" [style.background-color]="getDetailColor(record.unitTest)">
+				  <span class="card-title"><b>Unit Test</b></span>
+					<div id="{{record.id+'Unit'}}">
+						  <!--<table style="margin: 29px 0px 29px 0px;">
+							  <tr> <td>Test Coverage: <b>{{recordDetail.unitTestCoverage}}%</b></td></tr>
+							  <tr> <td>Tests Passed: <b>{{ recordDetail.unitTestSuccess | number : '1.2-2'}}%</b></td></tr>
+						  </table>-->
+						  </div>
+				  
+				</div>
+			  </div>
+			</div>
+			<div class="col s3 m3" id="{{record.id+'modalFuncTest'}}">
+			  <div class="card" style="cursor:pointer" (click)="openModal(record.id+'modalFuncTest')">
+				<div class="card-content black-text" *ngIf="recordDetail" [style.background-color]="getDetailColor(record.functionalTest)">
+				  <span class="card-title"><b>Functional Test</b></span>
+				  <table style="margin: 29px 0px 29px 0px;">
+					  <tr> <td>Test Coverage: <b>{{recordDetail.funcTestCoverage}}%</b></td></tr>
+					  <tr> <td>Tests Passed: <b>{{ recordDetail.funcTestSuccess | number : '1.2-2'}}%</b></td></tr>
+				  </table>
+				</div>
+			  </div>
+			</div>			
+			
+		</div>
+			 
+		<div class="row">
+			<div class="col s12 m6">
+				<a class="waves-effect waves-light btn" *ngIf="record.state=='Complete'"style="background-color: #5e9cd3">Deploy</a>
+				<a class="waves-effect waves-light btn" *ngIf="record.state=='Accepted'" style="background-color: #5e9cd3">Merged Build</a>
+				<a class="waves-effect waves-light btn" *ngIf="record.state=='Rejected'" style="background-color: #5e9cd3">Find Issues</a>
+				<a class="waves-effect waves-light btn" *ngIf="record.state=='Failed'" style="background-color: #5e9cd3">Retry</a>
+				<label style="color:green; font-size:18px" *ngIf="record.state=='Complete'">&nbsp;&nbsp;Result:&nbsp;COMPLETE</label>
+				<label style="color:green; font-size:18px" *ngIf="record.state=='Accepted'">&nbsp;&nbsp;Result:&nbsp;ACCEPTED. Auto-Merged</label>
+				<label style="color:red; font-size:18px" *ngIf="record.state=='Rejected'">&nbsp;&nbsp;Result:&nbsp;REJECTED</label>
+				<label style="color:red; font-size:18px" *ngIf="record.state=='Failed'">&nbsp;&nbsp;Result:&nbsp;FAILED</label>
+			
+			</div>
+		</div>
+	</div>
+	
+  </li>
+</ul>
+</div>
+ 
+	<div id="modalPopup" class="modal">
+		
+	</div>
