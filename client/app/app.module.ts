@@ -4,22 +4,27 @@ import { HttpModule } from '@angular/http';
 import { AppComponent }  from './app.component';
 import { VideoService } from './video.service';
 import { VideoListComponent } from './video-list.component';
+import { LoginComponent } from './login.component';
 import { VideoDetailComponent } from './video-detail.component';
 import { RouterModule } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import {MaterializeDirective} from 'angular2-materialize';
+import { FormsModule }   from '@angular/forms';
+
 
 
 @NgModule({
   imports:      [
     BrowserModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+	FormsModule
   ],
   declarations: [
     AppComponent,
     VideoListComponent,
 	VideoDetailComponent,
+	LoginComponent,
     MaterializeDirective
   ],
   providers: [

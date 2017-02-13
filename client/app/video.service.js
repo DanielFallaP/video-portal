@@ -11,27 +11,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 require('rxjs/add/operator/toPromise');
 var http_1 = require('@angular/http');
-var Rx_1 = require('rxjs/Rx');
+var router_1 = require('@angular/router');
 var VideoService = (function () {
-    function VideoService(http) {
+    function VideoService(http, router) {
         this.http = http;
+        this.router = router;
     }
     VideoService.prototype.getVideo = function () {
-        return this.http.get('http://localhost:3000/video')
+        return this.http.get('video')
             .toPromise()
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    VideoService.prototype.getComments = function () {
-        // ...using get request
-        return this.http.get('http://localhost:3000/videos')
-            .map(function (res) { return res.json(); })
-            .catch(function (error) { return Rx_1.Observable.throw(error.json().error || 'Server error'); });
-    };
-    VideoService.prototype.getVideoDetail = function (id) {
-        return this.http.get('http://localhost:8080/api/donors/' + id)
+    VideoService.prototype.getVideos = function () {
+        var params = new http_1.URLSearchParams();
+        params.set('sessionId', this.sessionId);
+        return this.http.get('videos', { search: params })
             .toPromise()
-            .then(function (response) { return response.json().data; })
+            .then(function (res) { return res.json().data; })
+            .catch(this.handleError);
+    };
+    VideoService.prototype.signIn = function (user) {
+        var headers = new http_1.Headers({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        var options = new http_1.RequestOptions({ headers: headers });
+        return this.http.post('user/auth', user, options)
+            .toPromise()
             .catch(this.handleError);
     };
     VideoService.prototype.handleError = function (error) {
@@ -39,7 +46,7 @@ var VideoService = (function () {
     };
     VideoService = __decorate([
         core_1.Injectable(), 
-        __metadata('design:paramtypes', [http_1.Http])
+        __metadata('design:paramtypes', [http_1.Http, router_1.Router])
     ], VideoService);
     return VideoService;
 }());

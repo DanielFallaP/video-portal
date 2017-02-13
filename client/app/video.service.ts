@@ -1,35 +1,44 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import { Video } from './video';
-import { Headers, Http, Response } from '@angular/http';
+import { Headers, Http, Response, RequestOptions, URLSearchParams } from '@angular/http';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
+import { User } from './user';
 
 @Injectable()
 export class VideoService{
-	constructor(private http:Http){}
+	constructor(private http:Http,
+		private router: Router){}
 	
+	sessionId: string;
+  
 	getVideo(): Promise<Video[]>{
-		return this.http.get('http://localhost:3000/video')
+		return this.http.get('video')
 			.toPromise()
-			.then(response=>response.json().data as Video[])
+			.then(response => response.json().data as Video[])
 			.catch(this.handleError);
 	}
 	
-	getComments() : Observable<Video[]> {
-
-         // ...using get request
-         return this.http.get('http://localhost:3000/videos')
-                        // ...and calling .json() on the response to return data
-                         .map((res:Response) => res.json())
-                         //...errors if any
-                         .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-
-     }
-	
-	getVideoDetail(id: string): Promise<Video>{
-		return this.http.get('http://localhost:8080/api/donors/' + id)
+	getVideos() : Promise<Video[]> {
+		let params: URLSearchParams = new URLSearchParams();
+		params.set('sessionId', this.sessionId);
+		
+        return this.http.get('videos', { search: params })
 			.toPromise()
-			.then(response=>response.json().data as Video)
+			.then((res: Response) => res.json().data as Video[])
+			.catch(this.handleError);
+    }
+	
+	signIn(user: User) : Promise<any> {
+		let headers = new Headers({ 
+			'Content-Type': 'application/json',
+			'Accept': 'application/json'
+		}); 
+		let options = new RequestOptions({ headers: headers });
+		
+		return this.http.post('user/auth', user, options)
+			.toPromise()
 			.catch(this.handleError);
 	}
 	

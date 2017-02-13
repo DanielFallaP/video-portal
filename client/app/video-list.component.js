@@ -8,6 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+require('rxjs/add/operator/switchMap');
 var core_1 = require('@angular/core');
 var video_service_1 = require('./video.service');
 require('app/modals.js');
@@ -16,15 +17,12 @@ var VideoListComponent = (function () {
         this.videoService = videoService;
     }
     VideoListComponent.prototype.ngOnInit = function () {
-        /*this.donorService.getComments()
-               .subscribe(
-                donors => {
-                    setDonors(donors);
-                }, //Bind to view
-                err => {
-                    // Log errors if any
-                    console.log(err);
-                });*/
+        var _this = this;
+        this.videoService.getVideos()
+            .then(function (videos) {
+            _this.videos = videos;
+            showToast('Welcome!!!', 6000);
+        });
     };
     ;
     VideoListComponent.prototype.getVideos = function () {

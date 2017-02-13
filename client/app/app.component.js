@@ -9,16 +9,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require('@angular/core');
+var video_service_1 = require('./video.service');
 var AppComponent = (function () {
-    function AppComponent() {
+    function AppComponent(videoService) {
+        this.videoService = videoService;
         this.title = 'Video Portal';
+        this.sessionId = this.videoService.sessionId;
     }
     AppComponent = __decorate([
         core_1.Component({
             selector: 'my-app',
-            template: "\n   <nav>\n    <div class=\"nav-wrapper\" style=\"background-color:black;\">\n      <div class=\"brand-logo\">&nbsp;{{title}}</div>\n      <ul id=\"nav-mobile\" class=\"right hide-on-med-and-down\">\n        <li><a href=\"/\"><i class=\"material-icons\">power_settings_new</i></a></li>\n\t\t\n      </ul>\n    </div>\n  </nav>\n  <router-outlet></router-outlet>\n  ",
+            template: "\n   <nav>\n    <div class=\"nav-wrapper\" style=\"background-color:black;\">\n      <div class=\"brand-logo\">&nbsp;{{title}}</div>\n      <ul id=\"nav-mobile\" class=\"right hide-on-med-and-down\">\n        <li *ngIf=\"sessionId\"><a href=\"/\"><i class=\"material-icons\">power_settings_new</i></a></li>\n\t\t\n      </ul>\n    </div>\n  </nav>\n  <router-outlet></router-outlet>\n  ",
         }), 
-        __metadata('design:paramtypes', [])
+        __metadata('design:paramtypes', [video_service_1.VideoService])
     ], AppComponent);
     return AppComponent;
 }());

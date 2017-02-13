@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { VideoService } from './video.service';
 
 @Component({
   selector: 'my-app',
@@ -8,7 +9,7 @@ import { Component } from '@angular/core';
     <div class="nav-wrapper" style="background-color:black;">
       <div class="brand-logo">&nbsp;{{title}}</div>
       <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li><a href="/"><i class="material-icons">power_settings_new</i></a></li>
+        <li *ngIf="sessionId"><a href="/"><i class="material-icons">power_settings_new</i></a></li>
 		
       </ul>
     </div>
@@ -18,5 +19,7 @@ import { Component } from '@angular/core';
 })
 
 export class AppComponent  {
-  title = 'Video Portal';
+	constructor (private videoService: VideoService){}
+	title: string = 'Video Portal';
+	sessionId: string = this.videoService.sessionId;
 }

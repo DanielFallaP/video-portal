@@ -1,8 +1,10 @@
 declare function showModal():void;
 declare function showToast(message:string, delay:number):void;
 
+import 'rxjs/add/operator/switchMap';
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { VideoService } from './video.service';
 import { Video } from './video';
 import { RecordDetail } from './record-detail';
@@ -15,22 +17,18 @@ import 'app/modals.js';
   //styleUrls: ['main-grid.component.css']
 })
 
-export class VideoListComponent{
+export class VideoListComponent implements OnInit{
   
   constructor(private videoService: VideoService){}
-  records: Video[];
+  videos: Video[];
   recordDetail: RecordDetail;
   ngOnInit(): void{
 
-	/*this.donorService.getComments()
-		   .subscribe(
-			donors => {
-				setDonors(donors);
-			}, //Bind to view
-			err => {
-				// Log errors if any
-				console.log(err);
-			});*/
+	this.videoService.getVideos()
+		.then((videos: Video[]) => {
+			this.videos = videos;
+			showToast('Welcome!!!', 6000);
+		});
   };
   
   getVideos(): void {
