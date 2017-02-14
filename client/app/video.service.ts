@@ -20,9 +20,13 @@ export class VideoService{
 			.catch(this.handleError);
 	}
 	
-	getVideos() : Promise<Video[]> {
+	getVideos(skip: number, limit: number) : Promise<Video[]> {
 		let params: URLSearchParams = new URLSearchParams();
 		params.set('sessionId', this.sessionId);
+		if (skip != null && limit != null){
+			params.set('skip', skip.toString());
+			params.set('limit', limit.toString());
+		}
 		
         return this.http.get('videos', { search: params })
 			.toPromise()

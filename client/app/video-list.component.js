@@ -15,17 +15,36 @@ require('app/modals.js');
 var VideoListComponent = (function () {
     function VideoListComponent(videoService) {
         this.videoService = videoService;
+        this.initialOffset = 3000;
+        this.skip = 10;
     }
     VideoListComponent.prototype.ngOnInit = function () {
         var _this = this;
-        this.videoService.getVideos()
+        self = this;
+        this.offsetCount = 0;
+        this.videoService.getVideos(0, this.skip)
             .then(function (videos) {
+            setScrollFire(_this.initialOffset, _this.getMoreVideos);
             _this.videos = videos;
+            for (var i in _this.videos) {
+            }
             showToast('Welcome!!!', 6000);
         });
     };
     ;
     VideoListComponent.prototype.getVideos = function () {
+    };
+    VideoListComponent.prototype.addStarRating = function () {
+        showToast('Rating Set!', 2000);
+    };
+    VideoListComponent.prototype.getMoreVideos = function () {
+        self.videoService.getVideos((self.offsetCount + 1) * self.skip, self.skip)
+            .then(function (videos) {
+            self.offsetCount++;
+            setScrollFire((self.offsetCount + 1) * (self.initialOffset), self.getMoreVideos);
+            self.videos = self.videos.concat(videos);
+            showToast('More Videos!', 3000);
+        });
     };
     VideoListComponent.prototype.openModal = function (id) {
         var st = '#' + id;

@@ -23,9 +23,13 @@ var VideoService = (function () {
             .then(function (response) { return response.json().data; })
             .catch(this.handleError);
     };
-    VideoService.prototype.getVideos = function () {
+    VideoService.prototype.getVideos = function (skip, limit) {
         var params = new http_1.URLSearchParams();
         params.set('sessionId', this.sessionId);
+        if (skip != null && limit != null) {
+            params.set('skip', skip.toString());
+            params.set('limit', limit.toString());
+        }
         return this.http.get('videos', { search: params })
             .toPromise()
             .then(function (res) { return res.json().data; })
