@@ -8,59 +8,124 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-require('rxjs/add/operator/switchMap');
 var core_1 = require('@angular/core');
 var video_service_1 = require('./video.service');
+var rating_1 = require('./rating');
+var router_1 = require('@angular/router');
 require('app/modals.js');
 var VideoListComponent = (function () {
-    function VideoListComponent(videoService) {
+    function VideoListComponent(videoService, router) {
         this.videoService = videoService;
+        this.router = router;
+        //ScrollFire offset
         this.initialOffset = 3000;
-        this.skip = 10;
+        //Default limit number for paging results
+        this.limit = 10;
     }
+    /**
+     * Loads the first 10 videos, sets ScrollFire given the offse,
+     * and updates the rating for all videos.
+     */
     VideoListComponent.prototype.ngOnInit = function () {
         var _this = this;
         self = this;
         this.offsetCount = 0;
-        this.videoService.getVideos(0, this.skip)
+        this.videoService.getVideos(0, this.limit)
             .then(function (videos) {
             setScrollFire(_this.initialOffset, _this.getMoreVideos);
             _this.videos = videos;
-            for (var i in _this.videos) {
-            }
-            showToast('Welcome!!!', 6000);
+            _this.updateStarColors(videos);
+            showToast('Videos Loaded!!!', 6000);
         });
     };
     ;
-    VideoListComponent.prototype.getVideos = function () {
+    /**
+     * Updates current playing video.
+     */
+    VideoListComponent.prototype.updatePlayingVideo = function (video) {
+        if (this.playingVideo != null && this.playingVideo !== video._id)
+            stopPlayback(this.playingVideo);
+        this.playingVideo = video._id;
     };
-    VideoListComponent.prototype.addStarRating = function () {
-        showToast('Rating Set!', 2000);
+    /**
+     * Updates the star rating for all videos passed
+     * as params.
+     */
+    VideoListComponent.prototype.updateStarColors = function (videos) {
+        for (var i in videos) {
+            if (videos[i].ratings != null
+                && videos[i].ratings.length > 0) {
+                var length = videos[i].ratings.length;
+                videos[i].rating = Math.round(videos[i].ratings.reduce(self.add, 0) / length);
+            }
+            else {
+                videos[i].rating = 0;
+            }
+        }
     };
+    /**
+     * Adds two numbers.
+     */
+    VideoListComponent.prototype.add = function (a, b) {
+        return a + b;
+    };
+    /**
+     * Rates video specified by id.
+     */
+    VideoListComponent.prototype.rateVideo = function (id, score) {
+        var rating = new rating_1.Rating();
+        rating.videoId = id;
+        rating.rating = score;
+        this.videoService.rateVideo(rating)
+            .then(function () {
+            showToast('Thanks for your rating!!!', 6000);
+        });
+    };
+    /**
+     * Gets 10 more videos, updates the star rating,
+     * and creates a new ScrollFire for when it comes the
+     * time to load the next 10.
+     */
     VideoListComponent.prototype.getMoreVideos = function () {
-        self.videoService.getVideos((self.offsetCount + 1) * self.skip, self.skip)
+        self.videoService.getVideos((self.offsetCount + 1) * self.limit, self.limit)
             .then(function (videos) {
             self.offsetCount++;
             setScrollFire((self.offsetCount + 1) * (self.initialOffset), self.getMoreVideos);
             self.videos = self.videos.concat(videos);
+            self.updateStarColors(videos);
             showToast('More Videos!', 3000);
         });
     };
-    VideoListComponent.prototype.openModal = function (id) {
-        var st = '#' + id;
-        document.getElementById("modalPopup").innerHTML = document.getElementById(id).innerHTML;
-        showModal();
+    /**
+     * Gets the color for the nth star in the rating star
+     * element.
+     */
+    VideoListComponent.prototype.getRatingColor = function (video, star) {
+        return star <= video.rating ? 'gold' : 'black';
     };
-    VideoListComponent.prototype.getVideoDetail = function (record) {
+    /**
+     * Sets current video, and navigates to details page.
+     */
+    VideoListComponent.prototype.goToDetail = function (video) {
+        this.videoService.currentVideo = video;
+        this.router.navigate(['/videoDetail']);
     };
-    ;
+    /**
+     * Signs out from the video portal.
+     */
+    VideoListComponent.prototype.signOut = function () {
+        this.videoService.signOut()
+            .then(function () { });
+        this.router.navigate(['/']);
+    };
     VideoListComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
             selector: 'video-list',
             templateUrl: 'video-list.component.html',
+            styleUrls: ['video-list.component.css']
         }), 
-        __metadata('design:paramtypes', [video_service_1.VideoService])
+        __metadata('design:paramtypes', [video_service_1.VideoService, router_1.Router])
     ], VideoListComponent);
     return VideoListComponent;
 }());

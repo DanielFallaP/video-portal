@@ -11,11 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require('@angular/core');
 var router_1 = require('@angular/router');
 var video_list_component_1 = require('./video-list.component');
+var video_detail_component_1 = require('./video-detail.component');
 var login_component_1 = require('./login.component');
+// Video portal's routes.
 var routes = [
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'videoList', component: video_list_component_1.VideoListComponent },
-    { path: 'login', component: login_component_1.LoginComponent },
+    { path: 'videoDetail', component: video_detail_component_1.VideoDetailComponent },
+    { path: '', component: login_component_1.LoginComponent },
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {

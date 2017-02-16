@@ -12,17 +12,17 @@ var core_1 = require('@angular/core');
 require('rxjs/add/operator/toPromise');
 var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
+/**
+ * Service class handling all communication with the API.
+ */
 var VideoService = (function () {
     function VideoService(http, router) {
         this.http = http;
         this.router = router;
     }
-    VideoService.prototype.getVideo = function () {
-        return this.http.get('video')
-            .toPromise()
-            .then(function (response) { return response.json().data; })
-            .catch(this.handleError);
-    };
+    /**
+     * Gets the videos by paging if present.
+     */
     VideoService.prototype.getVideos = function (skip, limit) {
         var params = new http_1.URLSearchParams();
         params.set('sessionId', this.sessionId);
@@ -35,6 +35,25 @@ var VideoService = (function () {
             .then(function (res) { return res.json().data; })
             .catch(this.handleError);
     };
+    /**
+     * Calls the rating method given video id and rating
+     * encapsulated in the rating object.
+     */
+    VideoService.prototype.rateVideo = function (rating) {
+        var params = new http_1.URLSearchParams();
+        params.set('sessionId', this.sessionId);
+        var headers = new http_1.Headers({
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        });
+        var options = new http_1.RequestOptions({ headers: headers, search: params });
+        return this.http.post('video/ratings', rating, options)
+            .toPromise()
+            .catch(this.handleError);
+    };
+    /**
+     * Signs in into the app.
+     */
     VideoService.prototype.signIn = function (user) {
         var headers = new http_1.Headers({
             'Content-Type': 'application/json',
@@ -45,8 +64,21 @@ var VideoService = (function () {
             .toPromise()
             .catch(this.handleError);
     };
+    /**
+     * Signs out from the video portal.
+     */
+    VideoService.prototype.signOut = function () {
+        var params = new http_1.URLSearchParams();
+        params.set('sessionId', this.sessionId);
+        return this.http.get('user/logout', { search: params })
+            .toPromise()
+            .catch(this.handleError);
+    };
+    /**
+     * Handles server error.
+     */
     VideoService.prototype.handleError = function (error) {
-        return Promise.reject(error.message || error);
+        return Promise.reject(error.error || error);
     };
     VideoService = __decorate([
         core_1.Injectable(), 

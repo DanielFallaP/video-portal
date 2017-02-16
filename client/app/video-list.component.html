@@ -1,14 +1,28 @@
+<nav> 
+    <div class="nav-wrapper" style="background-color:black;">
+      <div class="brand-logo">&nbsp;Video Portal</div>
+      <ul class="right hide-on-med-and-down" style="cursor: pointer;" (click)="signOut()">
+        <li><i class="material-icons">power_settings_new</i></li>		
+      </ul>
+    </div>
+</nav>
 <div class="container" id="videoList" style="margin-top: 35px;">
 	<div *ngFor = "let video of videos" class="row">
-		<div class="card blue-grey darken-1 hoverable" style="cursor:pointer">
+		<div class="card blue-grey darken-1 hoverable" >
 			<div class="card-content white-text">
-				<span class="card-title">{{video.name}}</span>
-				<video controls="" autoplay="" name="media"><source src="http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4" type="video/mp4"/></video>
-				<!--video class="responsive-video" controls>
-					<source src="{{video.url}}" type="video/mp4">
-				</video-->
+				<span class="card-title" style="cursor:pointer" (click)="goToDetail(video)">
+					{{video.name}}
+				</span>
+				<video id="{{video._id}}" (play)="updatePlayingVideo(video)" class="responsive-video" [src] = "video.url" controls controls="" name="media"></video>
 			</div>
 			<div class="card-action">
+				<div class="rating">
+					<span (click)="rateVideo(video._id, 5)" [style.color]="getRatingColor(video, 5)">☆</span>
+					<span (click)="rateVideo(video._id, 4)" [style.color]="getRatingColor(video, 4)">☆</span>
+					<span (click)="rateVideo(video._id, 3)" [style.color]="getRatingColor(video, 3)">☆</span>
+					<span (click)="rateVideo(video._id, 2)" [style.color]="getRatingColor(video, 2)">☆</span>
+					<span (click)="rateVideo(video._id, 1)" [style.color]="getRatingColor(video, 1)">☆</span>
+				</div>
 				<p>{{video.description}}</p>
 			</div>
 		 </div>

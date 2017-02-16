@@ -10,26 +10,56 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var video_service_1 = require('./video.service');
+var rating_1 = require('./rating');
+var router_1 = require('@angular/router');
 require('app/modals.js');
 var VideoDetailComponent = (function () {
-    function VideoDetailComponent(videoService) {
+    function VideoDetailComponent(videoService, router) {
         this.videoService = videoService;
+        this.router = router;
     }
+    /**
+     * Sets the video to show in the details page.
+     */
     VideoDetailComponent.prototype.ngOnInit = function () {
+        this.video = this.videoService.currentVideo;
     };
     ;
-    VideoDetailComponent.prototype.openModal = function (id) {
-        var st = '#' + id;
-        document.getElementById("modalPopup").innerHTML = document.getElementById(id).innerHTML;
-        showModal();
+    /**
+     * Gets the rating color for the nth star in the star
+     * rating according to the video's rating.
+     */
+    VideoDetailComponent.prototype.getRatingColor = function (video, star) {
+        return star <= video.rating ? 'gold' : 'black';
+    };
+    /**
+     * Rates current video.
+     */
+    VideoDetailComponent.prototype.rateVideo = function (id, score) {
+        var rating = new rating_1.Rating();
+        rating.videoId = id;
+        rating.rating = score;
+        this.videoService.rateVideo(rating)
+            .then(function () {
+            showToast('Thanks for your rating!!!', 6000);
+        });
+    };
+    /**
+     * Signs out from the app.
+     */
+    VideoDetailComponent.prototype.signOut = function () {
+        this.videoService.signOut()
+            .then(function () { });
+        this.router.navigate(['/']);
     };
     VideoDetailComponent = __decorate([
         core_1.Component({
             moduleId: module.id,
-            selector: 'video',
+            selector: 'video-detail',
             templateUrl: 'video-detail.component.html',
+            styleUrls: ['video-list.component.css']
         }), 
-        __metadata('design:paramtypes', [video_service_1.VideoService])
+        __metadata('design:paramtypes', [video_service_1.VideoService, router_1.Router])
     ], VideoDetailComponent);
     return VideoDetailComponent;
 }());

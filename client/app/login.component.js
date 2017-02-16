@@ -15,34 +15,45 @@ var http_1 = require('@angular/http');
 var router_1 = require('@angular/router');
 require('app/modals.js');
 var LoginComponent = (function () {
-    function LoginComponent(videoService, http, router) {
+    function LoginComponent(videoService, http, router, ref) {
         this.videoService = videoService;
         this.http = http;
         this.router = router;
+        this.ref = ref;
     }
+    /**
+     * Starts component with predefined credentials.
+     */
     LoginComponent.prototype.ngOnInit = function () {
         this.user = new user_1.User();
         this.user.username = 'ali';
         this.user.password = '5f4dcc3b5aa765d61d8327deb882cf99';
     };
     ;
+    /**
+     * Signs into the video list page with current user info.
+     */
     LoginComponent.prototype.signIn = function (user) {
         var _this = this;
         this.videoService.signIn(user)
             .then(function (res) {
+            _this.videoService.sessionId = res.json().sessionId;
             if (res.json().sessionId) {
-                _this.videoService.sessionId = res.json().sessionId;
+                _this.ref.tick();
                 _this.router.navigate(['/videoList']);
             }
             else {
-                _this.handleError(null);
+                showToast('Wrong credentials. Please try again', 3000);
             }
         })
             .catch(this.handleError);
     };
     ;
+    /**
+     * Handles server error
+     */
     LoginComponent.prototype.handleError = function (error) {
-        showToast('Wrong credentials. Please try again', 3000);
+        showToast('Something went wrong. Please try again later', 3000);
     };
     LoginComponent = __decorate([
         core_1.Component({
@@ -50,7 +61,7 @@ var LoginComponent = (function () {
             selector: 'login',
             templateUrl: 'login.component.html',
         }), 
-        __metadata('design:paramtypes', [video_service_1.VideoService, http_1.Http, router_1.Router])
+        __metadata('design:paramtypes', [video_service_1.VideoService, http_1.Http, router_1.Router, core_1.ApplicationRef])
     ], LoginComponent);
     return LoginComponent;
 }());

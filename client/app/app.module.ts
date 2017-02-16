@@ -11,14 +11,13 @@ import { AppRoutingModule } from './app-routing.module';
 import {MaterializeDirective} from 'angular2-materialize';
 import { FormsModule }   from '@angular/forms';
 
-
-
+//Imports modules, components, services and bootstrap component
 @NgModule({
   imports:      [
     BrowserModule,
     HttpModule,
     AppRoutingModule,
-	FormsModule
+	FormsModule,
   ],
   declarations: [
     AppComponent,

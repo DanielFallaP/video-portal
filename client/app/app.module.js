@@ -19,6 +19,7 @@ var video_detail_component_1 = require('./video-detail.component');
 var app_routing_module_1 = require('./app-routing.module');
 var angular2_materialize_1 = require('angular2-materialize');
 var forms_1 = require('@angular/forms');
+//Imports modules, components, services and bootstrap component
 var AppModule = (function () {
     function AppModule() {
     }
@@ -28,7 +29,7 @@ var AppModule = (function () {
                 platform_browser_1.BrowserModule,
                 http_1.HttpModule,
                 app_routing_module_1.AppRoutingModule,
-                forms_1.FormsModule
+                forms_1.FormsModule,
             ],
             declarations: [
                 app_component_1.AppComponent,

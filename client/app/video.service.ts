@@ -5,21 +5,25 @@ import { Headers, Http, Response, RequestOptions, URLSearchParams } from '@angul
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import { User } from './user';
+import { Rating } from './rating';
 
+/**
+ * Service class handling all communication with the API.
+ */
 @Injectable()
 export class VideoService{
 	constructor(private http:Http,
 		private router: Router){}
 	
+	//Logged in user session Id
 	sessionId: string;
-  
-	getVideo(): Promise<Video[]>{
-		return this.http.get('video')
-			.toPromise()
-			.then(response => response.json().data as Video[])
-			.catch(this.handleError);
-	}
 	
+	//Current video being played in the details
+	currentVideo: Video;
+	
+	/**
+	 * Gets the videos by paging if present.
+	 */
 	getVideos(skip: number, limit: number) : Promise<Video[]> {
 		let params: URLSearchParams = new URLSearchParams();
 		params.set('sessionId', this.sessionId);
@@ -34,6 +38,27 @@ export class VideoService{
 			.catch(this.handleError);
     }
 	
+	/**
+	 * Calls the rating method given video id and rating
+	 * encapsulated in the rating object.
+	 */
+	rateVideo(rating: Rating): Promise<any>{
+		let params: URLSearchParams = new URLSearchParams();
+		params.set('sessionId', this.sessionId);
+		let headers = new Headers({ 
+			'Content-Type': 'application/json',
+			'Accept': 'application/json'
+		}); 
+		let options = new RequestOptions({ headers: headers, search: params });
+		
+		return this.http.post('video/ratings', rating, options)
+			.toPromise()
+			.catch(this.handleError);
+	}
+	
+	/**
+	 * Signs in into the app.
+	 */
 	signIn(user: User) : Promise<any> {
 		let headers = new Headers({ 
 			'Content-Type': 'application/json',
@@ -46,8 +71,23 @@ export class VideoService{
 			.catch(this.handleError);
 	}
 	
+	/**
+	 * Signs out from the video portal.
+	 */
+	signOut(): Promise<any> {
+		let params: URLSearchParams = new URLSearchParams();
+		params.set('sessionId', this.sessionId);
+		
+		return this.http.get('user/logout', { search: params })
+			.toPromise()
+			.catch(this.handleError);
+	}
+	
+	/**
+	 * Handles server error.
+	 */
 	private handleError(error: any): Promise<any>{
-		return Promise.reject(error.message || error);
+		return Promise.reject(error.error || error);
 	}
 	
 }
