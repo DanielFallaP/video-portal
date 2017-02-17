@@ -28,11 +28,26 @@ export class VideoDetailComponent implements OnInit{
 	//Current video displayed on details page
 	video: Video;
 	
+	videos: Video[];
+	
    /**
 	* Sets the video to show in the details page.
     */
 	ngOnInit(): void{
 		this.video = this.videoService.currentVideo;
+		this.videos = this.videoService.videos;
+	};
+	
+	/**
+	 * Switches video detail from selected video
+	 * in navigation list.
+	 */
+	switchDetail(video: Video){
+		this.videos = this.videos.filter(function (vid){
+			return vid._id !== video._id;
+		});
+		this.videos.push(this.video);
+		this.video = video;
 	};
 	
 	/**

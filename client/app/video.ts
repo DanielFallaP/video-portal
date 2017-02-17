@@ -2,6 +2,10 @@
  * Object representation of a video.
  */
 export class Video{
+   constructor() 
+	{ 
+	}
+
   // Unique identifier
   _id: string;
   

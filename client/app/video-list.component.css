@@ -24,7 +24,11 @@
    color: yellow;
 }
 
-
+[class*="col-"] {
+    float: none;
+    display: table-cell;
+    vertical-align: top;
+}
 
 
 body { padding: 100px; }

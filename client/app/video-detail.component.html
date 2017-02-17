@@ -1,26 +1,53 @@
 <nav> 
     <div class="nav-wrapper" style="background-color:black;">
       <div class="brand-logo">&nbsp;Video Portal</div>
-      <ul class="right hide-on-med-and-down" style="cursor: pointer;" (click)="signOut()">
+	  <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
+      <ul id="mobile-demo" class="right hide-on-med-and-down" style="cursor: pointer;  margin-right: 12px" (click)="signOut()">
         <li><i class="material-icons">power_settings_new</i></li>		
       </ul>
     </div>
 </nav>
-<div  *ngIf="video" class="container" id="videoDetail" style="margin-top: 35px;">
-	<div class="card blue-grey darken-1 hoverable" >
-		<div class="card-content white-text">
-			<span class="card-title" style="cursor:pointer" (click)="goBack()">
+
+<ul class="side-nav col s3" style="overflow: auto; transform: translateX(0%);">
+	<li *ngFor = "let vid of videos">
+		<div class="card white darken-1 col s3 m6">
+			<div class="card-content" >
+				<span class="card-title" style="font-size: 16px; cursor: pointer;" 
+				(click) = "switchDetail(vid)">
+					{{vid.name}}
+				</span>
+				<br>
+				<video  class="responsive-video" [src] = "vid.url" controls controls="" name="media"></video>
+				<br>
+				<div class="rating" style="text-align: left;">
+					<span [style.color]="getRatingColor(vid, 5)" >☆</span>
+					<span [style.color]="getRatingColor(vid, 4)" >☆</span>
+					<span [style.color]="getRatingColor(vid, 3)" >☆</span>
+					<span [style.color]="getRatingColor(vid, 2)" >☆</span>
+					<span [style.color]="getRatingColor(vid, 1)" >☆</span>
+				</div>
+			</div>
+		 </div>
+	</li>
+	
+</ul>
+<div  *ngIf="video" class="right container" id="videoDetail" style="margin-top: 35px;">
+	
+	<div class="card blue-grey darken-1 hoverable col s8 m6" style="left: -40px;">
+		<div class="card-content white-text" style="text-align: center;">
+			<span class="card-title" >
 				{{video.name}}
 			</span>
+			<br>
 			<video id="{{video._id+'Detail'}}" class="responsive-video" [src] = "video.url" controls controls="" name="media"></video>
 		</div>
 		<div class="card-action">
-			<div class="rating">
-				<span (click)="rateVideo(video._id, 5)" [style.color]="getRatingColor(video, 5)">☆</span>
-				<span (click)="rateVideo(video._id, 4)" [style.color]="getRatingColor(video, 4)">☆</span>
-				<span (click)="rateVideo(video._id, 3)" [style.color]="getRatingColor(video, 3)">☆</span>
-				<span (click)="rateVideo(video._id, 2)" [style.color]="getRatingColor(video, 2)">☆</span>
-				<span (click)="rateVideo(video._id, 1)" [style.color]="getRatingColor(video, 1)">☆</span>
+			<div class="rating" style="text-align: left;">
+				<span (click)="rateVideo(video._id, 5)" [style.color]="getRatingColor(video, 5)" style="cursor:pointer">☆</span>
+				<span (click)="rateVideo(video._id, 4)" [style.color]="getRatingColor(video, 4)" style="cursor:pointer">☆</span>
+				<span (click)="rateVideo(video._id, 3)" [style.color]="getRatingColor(video, 3)" style="cursor:pointer">☆</span>
+				<span (click)="rateVideo(video._id, 2)" [style.color]="getRatingColor(video, 2)" style="cursor:pointer">☆</span>
+				<span (click)="rateVideo(video._id, 1)" [style.color]="getRatingColor(video, 1)" style="cursor:pointer">☆</span>
 			</div>
 			<p>{{video.description}}</p>
 		</div>

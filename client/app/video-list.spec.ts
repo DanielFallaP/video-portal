@@ -1,3 +1,4 @@
+declare var outcome: string;
 import { VideoService } from './video.service';
 import { Router } from '@angular/router';
 import { VideoListComponent } from './video-list.component';
@@ -10,8 +11,8 @@ import {
 import { User } from './user';
 import { Rating } from './rating';
 import { Video } from './video';
-import {MaterializeDirective} from 'angular2-materialize';
-import 'angular2-materialize';
+
+import 'app/materialize/MockMaterialize.js';
 
 var videos: Video[];
 
@@ -20,6 +21,9 @@ import {
   platformBrowserDynamicTesting
 } from '@angular/platform-browser-dynamic/testing';
 
+/**
+  * Video service mockup
+  */
 class MockVideoService {
   
 	getVideos(skip: number, limit: number): Promise<Video[]>{
@@ -32,31 +36,81 @@ class MockVideoService {
 		videos.push(video1);
 		
 		let video2 = new Video();
-		video2._id = "1";
+		video2._id = "2";
 		video2.name = "[0] Getting Started With ReactJs";
 		video2.description = "video description";
 		video2.ratings = [5, 3, 5];
 		videos.push(video2);
 		
 		let video3 = new Video();
-		video3._id = "1";
+		video3._id = "3";
 		video3.name = "[0] Getting Started With ReactJs";
 		video3.description = "video description";
 		video3.ratings = null;
 		videos.push(video3);
 		
-		return Promise.resolve(videos);
+		let video4 = new Video();
+		video4._id = "4";
+		video4.name = "[0] Getting Started With ReactJs";
+		video4.description = "video description";
+		video4.ratings = [2, 2, 2];
+		videos.push(video4);
+		
+		let video5 = new Video();
+		video5._id = "5";
+		video5.name = "[0] Getting Started With ReactJs";
+		video5.description = "video description";
+		video5.ratings = [1, 1, 1];
+		videos.push(video5);
+		
+		
+		let video6 = new Video();
+		video6._id = "6";
+		video6.name = "[0] Getting Started With ReactJs";
+		video6.description = "video description";
+		video6.ratings = [1, 1, 1];
+		videos.push(video6);
+		
+		let video7 = new Video();
+		video7._id = "7";
+		video7.name = "[0] Getting Started With ReactJs";
+		video7.description = "video description";
+		video7.ratings = [1, 1, 1];
+		videos.push(video7);
+		
+		
+		let video8 = new Video();
+		video8._id = "8";
+		video8.name = "[0] Getting Started With ReactJs";
+		video8.description = "video description";
+		video8.ratings = [1, 1, 1];
+		videos.push(video8);
+		
+		
+		var response: Video[] = [];
+		
+		var end = skip + limit;
+		for (var i = skip; i < end; i++){
+			response.push(videos[i]);
+		}
+		
+		return Promise.resolve(response);
 	}
 	
 	testMethod(): void {
 	}
 }
 
+/**
+  * Router mockup
+  */
 class MockedRouter{
 }
 
-describe('Testing Login Component', () => {
-
+/**
+  * Unit tests for VideoListComponent
+  */
+describe('Testing Video List Component', () => {
   let fixture: ComponentFixture<VideoListComponent>;
   let user: User;
 
@@ -69,7 +123,6 @@ describe('Testing Login Component', () => {
     TestBed.configureTestingModule({
       declarations: [
         VideoListComponent,
-		MaterializeDirective
       ],
       providers: [
         { provide: VideoService, useClass: MockVideoService },
@@ -80,6 +133,7 @@ describe('Testing Login Component', () => {
   
   beforeEach(() => {
     fixture = TestBed.createComponent(VideoListComponent);
+	fixture.componentInstance.limit = 4;
     fixture.detectChanges();
   });
 
@@ -91,23 +145,67 @@ describe('Testing Login Component', () => {
         return fixture.whenStable();
       })
       .then(() => {
-		expect(fixture.componentInstance.videos[0].rating).toEqual(3);
-		expect(fixture.componentInstance.videos[1].rating).toEqual(4);
-		expect(fixture.componentInstance.videos[2].rating).toEqual(0);
+		expect(fixture.componentInstance.videos[0][0].rating).toEqual(3);
+		expect(fixture.componentInstance.videos[0][1].rating).toEqual(4);
+		expect(fixture.componentInstance.videos[1][0].rating).toEqual(0);
       });
   })));
   
-  /*it('Should get golden as star color if rating greater than star number', async(inject([], () => {
-	fixture.componentInstance.getRatingColor(video, 3);
-	expect(fixture.componentInstance.video._id).toEqual(video._id);
-    fixture.whenStable()
+  it('Should stop playback if playing video is different', async(inject([], () => {
+	fixture.whenStable()
       .then(() => {
         fixture.detectChanges();
         return fixture.whenStable();
       })
       .then(() => {
-        const compiled = fixture.debugElement.nativeElement;
-        expect(true).toEqual(true);
-      });
-  })));*/
+		var instance = fixture.componentInstance;
+		instance.updatePlayingVideo(instance.videos[0][0]);
+		var firstplayed = instance.playingVideo;
+		instance.updatePlayingVideo(instance.videos[0][1]);
+		expect(firstplayed === instance.playingVideo).toBe(false);
+	  });
+  })));
+  
+  it('Should not stop playback if playing video is different', async(inject([], () => {
+	fixture.whenStable()
+      .then(() => {
+        fixture.detectChanges();
+        return fixture.whenStable();
+      })
+      .then(() => {
+		var instance = fixture.componentInstance;
+		instance.updatePlayingVideo(instance.videos[0][0]);
+		var firstplayed = instance.playingVideo;
+		instance.updatePlayingVideo(instance.videos[0][0]);
+		expect(firstplayed === instance.playingVideo).toBe(true);
+	  });
+  })));
+  
+  it('Should add more videos correctly to original list', async(inject([], () => {
+	var instance = fixture.componentInstance;
+	fixture.whenStable()
+      .then(() => {
+        fixture.detectChanges();
+		var size = 0;
+		for (var i in instance.videos){
+			for (var j in instance.videos[i]){
+				size ++;
+			}
+		}
+		
+		expect(size).toBe(4);
+		instance.getMoreVideos();
+		
+        return fixture.whenStable();
+      })
+      .then(() => {
+		var size = 0;
+		for (var i in instance.videos){
+			for (var j in instance.videos[i]){
+				size ++;
+			}
+		}
+		expect(size).toBe(8);
+	  });
+  })));
 });

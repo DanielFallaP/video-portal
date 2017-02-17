@@ -1,30 +1,48 @@
 <nav> 
     <div class="nav-wrapper" style="background-color:black;">
       <div class="brand-logo">&nbsp;Video Portal</div>
-      <ul class="right hide-on-med-and-down" style="cursor: pointer;" (click)="signOut()">
+      <ul class="right hide-on-med-and-down" style="cursor: pointer;  margin-right: 12px" (click)="signOut()">
         <li><i class="material-icons">power_settings_new</i></li>		
       </ul>
     </div>
 </nav>
 <div class="container" id="videoList" style="margin-top: 35px;">
 	<div *ngFor = "let video of videos" class="row">
-		<div class="card blue-grey darken-1 hoverable" >
-			<div class="card-content white-text">
-				<span class="card-title" style="cursor:pointer" (click)="goToDetail(video)">
-					{{video.name}}
-				</span>
-				<video id="{{video._id}}" (play)="updatePlayingVideo(video)" class="responsive-video" [src] = "video.url" controls controls="" name="media"></video>
-			</div>
-			<div class="card-action">
-				<div class="rating">
-					<span (click)="rateVideo(video._id, 5)" [style.color]="getRatingColor(video, 5)">☆</span>
-					<span (click)="rateVideo(video._id, 4)" [style.color]="getRatingColor(video, 4)">☆</span>
-					<span (click)="rateVideo(video._id, 3)" [style.color]="getRatingColor(video, 3)">☆</span>
-					<span (click)="rateVideo(video._id, 2)" [style.color]="getRatingColor(video, 2)">☆</span>
-					<span (click)="rateVideo(video._id, 1)" [style.color]="getRatingColor(video, 1)">☆</span>
+			<div class="card blue-grey darken-1 col-xs-12 col-sm-6" style="width: 50%; border-radius: 0px; border-right: 20px solid #fff; box-shadow: 0 0 0 0 rgba(0,0,0,0.16), 0 0 0 0 rgba(0,0,0,0.12);">
+				<div class="card-content white-text">
+					<span class="card-title" style="cursor:pointer" (click)="goToDetail(video[0])">
+						{{video[0].name}}
+					</span>
+					<video id="{{video[0]._id}}" (play)="updatePlayingVideo(video[0])" class="responsive-video" [src] = "video[0].url" controls controls="" name="media"></video>
 				</div>
-				<p>{{video.description}}</p>
-			</div>
-		 </div>
+				<div class="card-action">
+					<div class="rating" style="text-align: left;">
+						<span (click)="rateVideo(video[0]._id, 5)" [style.color]="getRatingColor(video[0], 5)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[0]._id, 4)" [style.color]="getRatingColor(video[0], 4)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[0]._id, 3)" [style.color]="getRatingColor(video[0], 3)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[0]._id, 2)" [style.color]="getRatingColor(video[0], 2)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[0]._id, 1)" [style.color]="getRatingColor(video[0], 1)" style="cursor:pointer">☆</span>
+					</div>
+					<p>{{video[0].description}}</p>
+				</div>
+			 </div>
+			 <div *ngIf ="video.length == 2" class="card blue-grey darken-1 col-xs-12 col-sm-6" style="width: 50%; border-left: 20px solid #fff; border-radius: 0px; box-shadow: 0 0 0 0 rgba(0,0,0,0.16), 0 0 0 0 rgba(0,0,0,0.12);">
+				<div class="card-content white-text">
+					<span class="card-title" style="cursor:pointer" (click)="goToDetail(video[1])">
+						{{video[1].name}}
+					</span>
+					<video id="{{video[1]._id}}" (play)="updatePlayingVideo(video[1])" class="responsive-video" [src] = "video[1].url" controls controls="" name="media"></video>
+				</div>
+				<div class="card-action">
+					<div class="rating" style="text-align: left;">
+						<span (click)="rateVideo(video[1]._id, 5)" [style.color]="getRatingColor(video[1], 5)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[1]._id, 4)" [style.color]="getRatingColor(video[1], 4)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[1]._id, 3)" [style.color]="getRatingColor(video[1], 3)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[1]._id, 2)" [style.color]="getRatingColor(video[1], 2)" style="cursor:pointer">☆</span>
+						<span (click)="rateVideo(video[1]._id, 1)" [style.color]="getRatingColor(video[1], 1)" style="cursor:pointer">☆</span>
+					</div>
+					<p>{{video[1].description}}</p>
+				</div>
+			 </div>
 	</div>
 </div>

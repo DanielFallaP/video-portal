@@ -31,10 +31,13 @@ export class VideoListComponent implements OnInit{
 				private router: Router){}
 				
 	//Current list of videos being displayed
-	videos: Video[];
-	
+	videos: Video[][] = [];
+
 	//Skip value to use during scrolling
 	offsetCount: number;
+	
+	//Number of columns in video detail page
+	columnNumber: number = 2;
 	
 	//ScrollFire offset
 	initialOffset: number = 3000;
@@ -55,7 +58,12 @@ export class VideoListComponent implements OnInit{
 		this.videoService.getVideos(0, this.limit)
 			.then((videos: Video[]) => {
 				setScrollFire(this.initialOffset, this.getMoreVideos);
-				this.videos = videos;
+				for (var i = 0; i < videos.length; i = i + this.columnNumber){
+					this.videos[i / this.columnNumber] = [];
+					for (var j = 0; j < this.columnNumber; j++){
+						this.videos[i / this.columnNumber].push(videos[i + j]);
+					}
+				}
 				this.updateStarColors(videos);
 				showToast('Videos Loaded!!!', 6000);
 			});
@@ -118,7 +126,15 @@ export class VideoListComponent implements OnInit{
 				self.offsetCount++;
 				setScrollFire((self.offsetCount + 1) * (self.initialOffset), 
 					self.getMoreVideos);
-				self.videos = self.videos.concat(videos);
+				
+				var newVideos: Video[][] = [];
+				for (var i = 0; i < videos.length; i = i + self.columnNumber){
+					newVideos[i / self.columnNumber] = [];
+					for (var j = 0; j < self.columnNumber; j++){
+						newVideos[i / self.columnNumber].push(videos[i + j]);
+					}
+				}	
+				self.videos = self.videos.concat(newVideos);
 				self.updateStarColors(videos);
 				showToast('More Videos!', 3000);
 			});
@@ -137,6 +153,16 @@ export class VideoListComponent implements OnInit{
 	 */
 	goToDetail(video: Video): void{
 		this.videoService.currentVideo = video;
+		var navVideos: Video[] = [];
+		for (var i in this.videos){
+			for (var j in this.videos[i]){
+				if (this.videos[i][j]._id !== video._id){
+					navVideos.push(this.videos[i][j]);
+				}
+			}
+		}
+				
+		this.videoService.videos = navVideos;
 		this.router.navigate(['/videoDetail']);
 	}
 

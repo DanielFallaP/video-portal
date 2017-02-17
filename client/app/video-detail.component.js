@@ -23,6 +23,19 @@ var VideoDetailComponent = (function () {
      */
     VideoDetailComponent.prototype.ngOnInit = function () {
         this.video = this.videoService.currentVideo;
+        this.videos = this.videoService.videos;
+    };
+    ;
+    /**
+     * Switches video detail from selected video
+     * in navigation list.
+     */
+    VideoDetailComponent.prototype.switchDetail = function (video) {
+        this.videos = this.videos.filter(function (vid) {
+            return vid._id !== video._id;
+        });
+        this.videos.push(this.video);
+        this.video = video;
     };
     ;
     /**

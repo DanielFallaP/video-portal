@@ -21,6 +21,9 @@ export class VideoService{
 	//Current video being played in the details
 	currentVideo: Video;
 	
+	//Array of loaded videos
+	videos: Video[];
+	
 	/**
 	 * Gets the videos by paging if present.
 	 */
