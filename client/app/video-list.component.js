@@ -34,6 +34,7 @@ var VideoListComponent = (function () {
         var _this = this;
         self = this;
         this.offsetCount = 0;
+        setAnimation('#videoList');
         this.videoService.getVideos(0, this.limit)
             .then(function (videos) {
             setScrollFire(_this.initialOffset, _this.getMoreVideos);
@@ -95,7 +96,7 @@ var VideoListComponent = (function () {
      * and creates a new ScrollFire for when it comes the
      * time to load the next 10.
      */
-    VideoListComponent.prototype.getMoreVideos = function () {
+    VideoListComponent.prototype.getMoreVideos = function (el) {
         self.videoService.getVideos((self.offsetCount + 1) * self.limit, self.limit)
             .then(function (videos) {
             self.offsetCount++;

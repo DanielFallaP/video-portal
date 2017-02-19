@@ -1,6 +1,8 @@
 declare function showModal(): void;
 declare function showToast(message: string, delay: number): void;
 
+declare function setAnimation(el: any): void;
+
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { VideoService } from './video.service';
@@ -34,8 +36,10 @@ export class VideoDetailComponent implements OnInit{
 	* Sets the video to show in the details page.
     */
 	ngOnInit(): void{
+
 		this.video = this.videoService.currentVideo;
 		this.videos = this.videoService.videos;
+		setAnimation('#videoDetail');
 	};
 	
 	/**

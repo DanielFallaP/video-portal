@@ -15,3 +15,7 @@ function setScrollFire(offset, callback){
  */
 function stopPlayback(videoId){
 }
+
+
+function setAnimation(el){
+}

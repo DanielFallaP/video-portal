@@ -22,3 +22,12 @@ function stopPlayback(videoId){
 	if (videoId)
 		document.getElementById(videoId).pause();
 }
+
+function setAnimation(el){
+	if (el)
+		Materialize.fadeInImage($(el));
+}
+
+function setCollapseButton(el){
+	$(".button-collapse").sideNav();
+}

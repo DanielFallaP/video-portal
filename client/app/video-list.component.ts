@@ -4,6 +4,7 @@ declare function setScrollFire(offset: number, callback: any): void;
 declare var self: any;
 declare var Math: any;
 declare function stopPlayback(videoId: string): void;
+declare function setAnimation(el: any): void;
 
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
@@ -55,6 +56,8 @@ export class VideoListComponent implements OnInit{
 	ngOnInit(): void{
 		self = this;
 		this.offsetCount = 0;
+		setAnimation('#videoList');
+
 		this.videoService.getVideos(0, this.limit)
 			.then((videos: Video[]) => {
 				setScrollFire(this.initialOffset, this.getMoreVideos);
@@ -120,7 +123,7 @@ export class VideoListComponent implements OnInit{
 	 * and creates a new ScrollFire for when it comes the
 	 * time to load the next 10.
 	 */
-	getMoreVideos(): void{
+	getMoreVideos(el: any): void{
 		self.videoService.getVideos((self.offsetCount + 1) * self.limit, self.limit)
 			.then((videos: Video[]) => {
 				self.offsetCount++;

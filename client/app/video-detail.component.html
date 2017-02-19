@@ -29,27 +29,27 @@
 			</div>
 		 </div>
 	</li>
-	
 </ul>
 <div  *ngIf="video" class="right container" id="videoDetail" style="margin-top: 35px;">
-	
-	<div class="card blue-grey darken-1 hoverable col s8 m6" style="left: -40px;">
-		<div class="card-content white-text" style="text-align: center;">
-			<span class="card-title" >
-				{{video.name}}
-			</span>
-			<br>
-			<video id="{{video._id+'Detail'}}" class="responsive-video" [src] = "video.url" controls controls="" name="media"></video>
-		</div>
-		<div class="card-action">
-			<div class="rating" style="text-align: left;">
-				<span (click)="rateVideo(video._id, 5)" [style.color]="getRatingColor(video, 5)" style="cursor:pointer">☆</span>
-				<span (click)="rateVideo(video._id, 4)" [style.color]="getRatingColor(video, 4)" style="cursor:pointer">☆</span>
-				<span (click)="rateVideo(video._id, 3)" [style.color]="getRatingColor(video, 3)" style="cursor:pointer">☆</span>
-				<span (click)="rateVideo(video._id, 2)" [style.color]="getRatingColor(video, 2)" style="cursor:pointer">☆</span>
-				<span (click)="rateVideo(video._id, 1)" [style.color]="getRatingColor(video, 1)" style="cursor:pointer">☆</span>
+	<ul id="videoDetail">
+		<li class="card blue-grey darken-1 hoverable col s8 m6" style="left: -40px;">
+			<div class="card-content white-text" style="text-align: center;">
+				<span class="card-title" >
+					{{video.name}}
+				</span>
+				<br>
+				<video id="{{video._id+'Detail'}}" class="responsive-video" [src] = "video.url" controls controls="" name="media"></video>
 			</div>
-			<p>{{video.description}}</p>
-		</div>
-	 </div>
+			<div class="card-action">
+				<div class="rating" style="text-align: left;">
+					<span (click)="rateVideo(video._id, 5)" [style.color]="getRatingColor(video, 5)" style="cursor:pointer">☆</span>
+					<span (click)="rateVideo(video._id, 4)" [style.color]="getRatingColor(video, 4)" style="cursor:pointer">☆</span>
+					<span (click)="rateVideo(video._id, 3)" [style.color]="getRatingColor(video, 3)" style="cursor:pointer">☆</span>
+					<span (click)="rateVideo(video._id, 2)" [style.color]="getRatingColor(video, 2)" style="cursor:pointer">☆</span>
+					<span (click)="rateVideo(video._id, 1)" [style.color]="getRatingColor(video, 1)" style="cursor:pointer">☆</span>
+				</div>
+				<p>{{video.description}}</p>
+			</div>
+		 </li>
+	 </ul>
 </div>

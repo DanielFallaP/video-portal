@@ -159,7 +159,7 @@ describe('Testing Video List Component', function () {
                 }
             }
             expect(size).toBe(4);
-            instance.getMoreVideos();
+            instance.getMoreVideos(null);
             return fixture.whenStable();
         })
             .then(function () {

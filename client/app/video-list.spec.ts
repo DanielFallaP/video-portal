@@ -194,7 +194,7 @@ describe('Testing Video List Component', () => {
 		}
 		
 		expect(size).toBe(4);
-		instance.getMoreVideos();
+		instance.getMoreVideos(null);
 		
         return fixture.whenStable();
       })

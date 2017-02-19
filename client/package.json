@@ -37,7 +37,7 @@
     "zone.js": "^0.7.2"
   },
   "devDependencies": {
-    "@types/jasmine": "^2.5.36",
+    "@types/jasmine": "2.5.41",
     "@types/node": "^6.0.46",
     "@types/selenium-webdriver": "^2.53.36",
     "canonical-path": "0.0.2",

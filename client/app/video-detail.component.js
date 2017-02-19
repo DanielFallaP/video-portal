@@ -24,6 +24,7 @@ var VideoDetailComponent = (function () {
     VideoDetailComponent.prototype.ngOnInit = function () {
         this.video = this.videoService.currentVideo;
         this.videos = this.videoService.videos;
+        setAnimation('#videoDetail');
     };
     ;
     /**

@@ -17,7 +17,7 @@ var login_component_1 = require('./login.component');
 var routes = [
     { path: 'videoList', component: video_list_component_1.VideoListComponent },
     { path: 'videoDetail', component: video_detail_component_1.VideoDetailComponent },
-    { path: '', component: login_component_1.LoginComponent },
+    { path: '', component: login_component_1.LoginComponent }
 ];
 var AppRoutingModule = (function () {
     function AppRoutingModule() {

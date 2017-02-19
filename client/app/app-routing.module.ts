@@ -8,7 +8,7 @@ import { LoginComponent } from './login.component';
 const routes: Routes = [
   { path: 'videoList',  component: VideoListComponent},
   { path: 'videoDetail',  component: VideoDetailComponent},
-  { path: '',  component: LoginComponent},
+  { path: '',  component: LoginComponent}
 ];
 @NgModule({
   imports: [ RouterModule.forRoot(routes) ],
